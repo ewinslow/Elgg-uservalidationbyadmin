@@ -12,7 +12,7 @@ $english = array(
 	'email:validate:subject' => "%s is requesting validation of account for %s!",
 	'email:validate:body' => "Hello %s,
 
-A user named %s is requesting validation of their account by you. 
+A user named %s is requesting validation of their account. 
 
 Geolocation details of the user is
 IP address: %s
@@ -28,15 +28,15 @@ If you can't click on the link, copy and paste it to your browser manually.
 %s
 ",
 
-	'user:validate:subject' => "Congrats %s! Your account is activated",
+	'user:validate:subject' => "Congrats %s! Your account has been activated",
 	'user:validate:body' => "Hello %s,
 
-This is to notify that your account at %s is activated by the admin. 
+This is to notify that your account at %s has been activated by an admin. 
 
 You can now login to the site with:
 
-Username : %s
-Password : the one you provided while registration
+Username: %s
+Password: the one you provided during registration
 
 %s
 %s
@@ -46,7 +46,7 @@ Password : the one you provided while registration
 	'email:confirm:fail' => "The user account could not be validated...",
 
 	'uservalidationbyadmin:registerok' => "You will be notified once the admin approves your account",
-	'uservalidationbyadmin:login:fail' => "Your account is not validated so the log in attempt failed. YOu have to wait till admin validates your account.",
+	'uservalidationbyadmin:login:fail' => "Your account is not validated so the log in attempt failed. You have to wait until admin validates your account.",
 
 	'uservalidationbyadmin:admin:no_unvalidated_users' => 'No unvalidated users.',
 

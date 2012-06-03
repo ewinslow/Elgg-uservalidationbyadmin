@@ -64,7 +64,7 @@ function uservalidationbyadmin_request_validation($user_guid, $admin_requested =
 		$link = "{$site->url}uservalidationbyadmin/confirm?u=$user_guid&c=$code";
 		// IP detection
 		$ip_address = $_SERVER['REMOTE_ADDR'];
-		$geoloc = "http://www.geobytes.com/IpLocator.htm?GetLocation&template=php3.txt&IpAddress=".$ip_address;
+		$geoloc = "https://secure.geobytes.com/IpLocator.htm?GetLocation&template=php3.txt&IpAddress=".$ip_address;
 		$geotags = get_meta_tags($geoloc);
 		$geocountry = $geotags['country'];
 		$georegion = $geotags['region'];

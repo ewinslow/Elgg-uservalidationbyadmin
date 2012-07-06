@@ -42,9 +42,11 @@ function uservalidationbyadmin_init() {
 	elgg_register_admin_menu_item('administer', 'unvalidated', 'users');
 
 	elgg_extend_view('css/admin', 'uservalidationbyadmin/css');
-	elgg_extend_view('js/elgg', 'uservalidationbyadmin/js');
+	
+	elgg_register_simplecache_view('js/elgg/uservalidationbyadmin');
+	elgg_register_js('elgg.uservalidationbyadmin', elgg_get_simplecache_url('js', 'elgg/uservalidationbyadmin'), 'footer');
 
-	$action_path = dirname(__FILE__) . '/actions';
+	$action_path = dirname(__FILE__) . '/actions/uservalidationbyadmin';
 
 	elgg_register_action('uservalidationbyadmin/validate', "$action_path/validate.php", 'admin');
 	elgg_register_action('uservalidationbyadmin/delete', "$action_path/delete.php", 'admin');

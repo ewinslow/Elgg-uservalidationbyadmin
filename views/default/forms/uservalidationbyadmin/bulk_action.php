@@ -5,8 +5,9 @@
  * @package Elgg.Core.Plugin
  * @subpackage uservalidationbyadmin.Administration
  */
+elgg_load_js('elgg.uservalidationbyadmin');
 
-$limit = get_input('limit', 10);
+$limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 
 // can't use elgg_list_entities() and friends because we don't use the default view for users.
@@ -46,14 +47,11 @@ $pagination = elgg_view('navigation/pagination',array(
 	'limit' => $limit,
 ));
 
-$bulk_actions_checkbox = '<label><input type="checkbox" id="uservalidationbyadmin-checkall" />'
-	. elgg_echo('uservalidationbyadmin:check_all') . '</label>';
-
-$validate = elgg_view('output/url', array(
-	'href' => 'action/uservalidationbyadmin/validate/',
-	'text' => elgg_echo('uservalidationbyadmin:admin:validate'),
+$validate = elgg_view('input/submit', array(
+	'name' => 'action/uservalidationbyadmin/validate',
+	'value' => elgg_echo('uservalidationbyadmin:admin:validate'),
 	'title' => elgg_echo('uservalidationbyadmin:confirm_validate_checked'),
-	'class' => 'uservalidationbyadmin-submit',
+	'class' => 'elgg-button elgg-button-submit elgg-requires-confirmation',
 	'is_action' => true,
 	'is_trusted' => true,
 ));
@@ -67,46 +65,48 @@ $resend_email = elgg_view('output/url', array(
 	'is_trusted' => true,
 ));
 */
-$delete = elgg_view('output/url', array(
-	'href' => 'action/uservalidationbyadmin/delete/',
-	'text' => elgg_echo('uservalidationbyadmin:admin:delete'),
+$delete = elgg_view('input/submit', array(
+	'name' => 'action/uservalidationbyadmin/delete',
+	'value' => elgg_echo('uservalidationbyadmin:admin:delete'),
 	'title' => elgg_echo('uservalidationbyadmin:confirm_delete_checked'),
-	'class' => 'uservalidationbyadmin-submit',
+	'class' => 'elgg-button elgg-button-action elgg-requires-confirmation',
 	'is_action' => true,
 	'is_trusted' => true,
 ));
 
 $bulk_actions = <<<___END
-	<ul class="elgg-menu elgg-menu-general elgg-menu-hz float-alt">
+	<ul class="elgg-toolbar elgg-menu-hz">
+		<style scoped>
+			.elgg-toolbar { padding: 10px 0; }
+			.elgg-toolbar > li { margin-right: 10px; }
+		</style>
 		<li>$validate</li><li>$delete</li>
 	</ul>
-
-	$bulk_actions_checkbox
 ___END;
 
+$tbody = '';
 if (is_array($users) && count($users) > 0) {
-	$html = '<ul class="elgg-list elgg-list-distinct">';
 	foreach ($users as $user) {
-		$html .= "<li id=\"unvalidated-user-{$user->guid}\" class=\"elgg-item uservalidationbyadmin-unvalidated-user-item\">";
-		$html .= elgg_view('uservalidationbyadmin/unvalidated_user', array('user' => $user));
-		$html .= '</li>';
+		$tbody .= elgg_view('user/default/unvalidated', array('entity' => $user));
 	}
-	$html .= '</ul>';
 }
 
-echo <<<___END
-<div class="elgg-module elgg-module-inline uservalidation-module">
-	<div class="elgg-head">
-		$bulk_actions
-	</div>
-	<div class="elgg-body">
-		$html
-	</div>
-</div>
-___END;
+$table = <<<TABLE
+<table class="elgg-table">
+	<thead>
+		<tr>
+			<th><!-- Checkbox gets inserted here --></th>
+			<th>Name</th>
+			<th>Username</th>
+			<th>Email</th>
+			<th>Created</th>
+		</tr>
+	</thead>
+	<tbody>
+		$tbody
+	</tbody>
+</table>
+TABLE;
 
-if ($count > 5) {
-	echo $bulk_actions;
-}
-
-echo $pagination;
+echo $bulk_actions; // toolbar
+echo $table; // data

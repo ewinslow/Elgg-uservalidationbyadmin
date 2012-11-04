@@ -83,7 +83,7 @@ $table = <<<TABLE
 	<thead>
 		<tr>
 			<th><!-- Checkbox gets inserted here --></th>
-			<th><!-- Profile icon in this row --></th>
+			<th><!-- Profile icon in this column --></th>
 			<th>Name</th>
 			<th>Username</th>
 			<th>Email</th>

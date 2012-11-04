@@ -61,6 +61,7 @@ Password: the one you provided during registration
 	'uservalidationbyadmin:confirm_validate_checked' => 'Validate checked users?',
 	'uservalidationbyadmin:confirm_resend_validation_checked' => 'Resend validation to checked users?',
 	'uservalidationbyadmin:confirm_delete_checked' => 'Delete checked users?',
+	'uservalidationbyadmin:confirm_spam_checked' => 'Mark checked users as spam?',
 	'uservalidationbyadmin:check_all' => 'All',
 
 	'uservalidationbyadmin:errors:unknown_users' => 'Unknown users',
@@ -76,8 +77,11 @@ Password: the one you provided during registration
 	'uservalidationbyadmin:messages:deleted_user' => 'User deleted.',
 	'uservalidationbyadmin:messages:deleted_users' => 'All checked users deleted.',
 	'uservalidationbyadmin:messages:resent_validation' => 'Validation request resent.',
-	'uservalidationbyadmin:messages:resent_validations' => 'Validation requests resent to all checked users.'
-
+	'uservalidationbyadmin:messages:resent_validations' => 'Validation requests resent to all checked users.',
+	'uservalidationbyadmin:messages:spammed_user' => 'User marked as spam.',
+	'uservalidationbyadmin:messages:spammed_users' => 'Users marked as spam.',
+	'uservalidationbyadmin:errors:could_not_spam_user' => 'Could not mark user as spam.',
+	'uservalidationbyadmin:errors:could_not_spam_users' => 'Could not mark users as spam.',
 );
 
 add_translation("en", $english);

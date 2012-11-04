@@ -48,6 +48,7 @@ function uservalidationbyadmin_init() {
 
 	$action_path = dirname(__FILE__) . '/actions/uservalidationbyadmin';
 
+	elgg_register_action('uservalidationbyadmin/spam', "$action_path/spam.php", 'admin');
 	elgg_register_action('uservalidationbyadmin/validate', "$action_path/validate.php", 'admin');
 	elgg_register_action('uservalidationbyadmin/delete', "$action_path/delete.php", 'admin');
 	elgg_register_action('uservalidationbyadmin/bulk_action', "$action_path/bulk_action.php", 'admin');

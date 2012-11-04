@@ -10,34 +10,14 @@ elgg_load_js('elgg.uservalidationbyadmin');
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 
-// can't use elgg_list_entities() and friends because we don't use the default view for users.
-$ia = elgg_set_ignore_access(TRUE);
-$hidden_entities = access_get_show_hidden_status();
-access_show_hidden_entities(TRUE);
+$db = new EvanDatabase();
+$users = $db->getUsers()->where('validated', false);
 
-$options = array(
-	'type' => 'user',
-	'wheres' => uservalidationbyadmin_get_unvalidated_users_sql_where(),
-	'limit' => $limit,
-	'offset' => $offset,
-	'count' => TRUE,
-);
-$count = elgg_get_entities($options);
-
+$count = $users->getCount();
 if (!$count) {
-	access_show_hidden_entities($hidden_entities);
-	elgg_set_ignore_access($ia);
-
 	echo autop(elgg_echo('uservalidationbyadmin:admin:no_unvalidated_users'));
 	return TRUE;
 }
-
-$options['count']  = FALSE;
-
-$users = elgg_get_entities($options);
-
-access_show_hidden_entities($hidden_entities);
-elgg_set_ignore_access($ia);
 
 // setup pagination
 $pagination = elgg_view('navigation/pagination',array(
@@ -48,12 +28,11 @@ $pagination = elgg_view('navigation/pagination',array(
 ));
 
 $validate = elgg_view('input/submit', array(
-	'name' => 'action/uservalidationbyadmin/validate',
+	'name' => 'uservalidationbyadmin/validate',
+	'formaction' => elgg_normalize_url('action/uservalidationbyadmin/validate'),
 	'value' => elgg_echo('uservalidationbyadmin:admin:validate'),
 	'title' => elgg_echo('uservalidationbyadmin:confirm_validate_checked'),
-	'class' => 'elgg-button elgg-button-submit elgg-requires-confirmation',
-	'is_action' => true,
-	'is_trusted' => true,
+	'class' => 'elgg-button-submit elgg-requires-confirmation',
 ));
 /*
 $resend_email = elgg_view('output/url', array(
@@ -65,13 +44,20 @@ $resend_email = elgg_view('output/url', array(
 	'is_trusted' => true,
 ));
 */
+$spam = elgg_view('input/submit', array(
+	'name' => 'uservalidationbyadmin/spam',
+	'formaction' => elgg_normalize_url('action/uservalidationbyadmin/spam'),
+	'value' => elgg_echo('spam'),
+	'title' => elgg_echo('uservalidationbyadmin:confirm_spam_checked'),
+	'class' => 'elgg-button-action elgg-requires-confirmation',
+));
+
 $delete = elgg_view('input/submit', array(
-	'name' => 'action/uservalidationbyadmin/delete',
+	'name' => 'uservalidationbyadmin/delete',
+	'formaction' => elgg_normalize_url('action/uservalidationbyadmin/delete'),
 	'value' => elgg_echo('uservalidationbyadmin:admin:delete'),
 	'title' => elgg_echo('uservalidationbyadmin:confirm_delete_checked'),
-	'class' => 'elgg-button elgg-button-action elgg-requires-confirmation',
-	'is_action' => true,
-	'is_trusted' => true,
+	'class' => 'elgg-button-action elgg-requires-confirmation',
 ));
 
 $bulk_actions = <<<___END
@@ -80,15 +66,16 @@ $bulk_actions = <<<___END
 			.elgg-toolbar { padding: 10px 0; }
 			.elgg-toolbar > li { margin-right: 10px; }
 		</style>
-		<li>$validate</li><li>$delete</li>
+		<li>$validate</li>
+		<li>$spam</li>
+		<li>$delete</li>
 	</ul>
 ___END;
 
 $tbody = '';
-if (is_array($users) && count($users) > 0) {
-	foreach ($users as $user) {
-		$tbody .= elgg_view('user/default/unvalidated', array('entity' => $user));
-	}
+
+foreach ($users->getItems($limit, $offset) as $user) {
+	$tbody .= elgg_view('user/default/unvalidated', array('entity' => $user));
 }
 
 $table = <<<TABLE

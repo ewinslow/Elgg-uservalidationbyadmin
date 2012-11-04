@@ -5,15 +5,15 @@
  * @package Elgg.Core.Plugin
  * @subpackage uservalidationbyadmin
  */
+
+
 /**
  * Get the admin user (returns the first admin user)
  * There is no API in elgg 1.8.5 to get the admin user
-*/
-function get_admin_user_details(){
-	global $CONFIG;
-	$query = "SELECT * FROM {$CONFIG->dbprefix}users_entity as e WHERE ( e.admin = 'yes')"; 
-	$info = get_data($query);
-	return $info[0];
+ */
+function get_admin_user_details() {
+	$db = new EvanDatabase();
+	return $db->getUsers()->where('admin', true)->getItem(0);
 }	
 /**
  * Generate an email activation code.
@@ -99,37 +99,4 @@ function uservalidationbyadmin_validate_email($user_guid, $code) {
 	}
 
 	return false;
-}
-
-/**
- * Return a where clause to get entities
- *
- * "Unvalidated" means metadata of validated is not set or not truthy.
- * We can't use elgg_get_entities_from_metadata() because you can't say
- * "where the entity has metadata set OR it's not equal to 1".
- *
- * @return array
- */
-function uservalidationbyadmin_get_unvalidated_users_sql_where() {
-	global $CONFIG;
-
-	$validated_id = get_metastring_id('validated');
-	if ($validated_id === false) {
-		$validated_id = add_metastring('validated');
-	}
-	$one_id = get_metastring_id('1');
-	if ($one_id === false) {
-		$one_id = add_metastring('1');
-	}
-
-	// thanks to daveb@freenode for the SQL tips!
-	$wheres = array();
-	$wheres[] = "e.enabled='no'";
-	$wheres[] = "NOT EXISTS (
-			SELECT 1 FROM {$CONFIG->dbprefix}metadata md
-			WHERE md.entity_guid = e.guid
-				AND md.name_id = $validated_id
-				AND md.value_id = $one_id)";
-
-	return $wheres;
 }

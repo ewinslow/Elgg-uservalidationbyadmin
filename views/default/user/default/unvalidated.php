@@ -14,6 +14,8 @@ $checkbox = elgg_view('input/checkbox', array(
 	'default' => false,
 ));
 
+$icon = evan_view_entity('icon', $user, array('size' => 'tiny'));
+
 $created = elgg_echo('uservalidationbyadmin:admin:user_created', array(elgg_view_friendly_time($user->time_created)));
 
 $validate = elgg_view('output/confirmlink', array(
@@ -31,6 +33,7 @@ $delete = elgg_view('output/confirmlink', array(
 $row = <<<___END
 <tr id="unvalidated-user-{$user->guid}" class="elgg-item">
 	<td>$checkbox</td>
+	<td>$icon</td>
 	<td>$user->name</td>
 	<td>$user->username</td>
 	<td>$user->email</td>

@@ -1,0 +1,19 @@
+{
+    "name": "ewinslow/elgg-uservalidationbyadmin",
+    "description": "Require users to be manually approved by an administrator",
+    "type": "elgg-plugin",
+    "extra": {
+    	"installer-name": "uservalidationbyadmin"
+    },
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Evan Winslow",
+            "email": "evan.b.winslow@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "ewinslow/elgg-evan": "dev-master"
+    }
+}

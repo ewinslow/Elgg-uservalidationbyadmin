@@ -12,8 +12,8 @@
  * There is no API in elgg 1.8.5 to get the admin user
  */
 function get_admin_user_details() {
-	$db = new EvanDatabase();
-	return $db->getUsers()->where('admin', true)->getItem(0);
+	global $EVAN;
+	return $EVAN->get('Evan\Storage\Db')->getUsers()->where('admin', true)->getItem(0);
 }	
 /**
  * Generate an email activation code.

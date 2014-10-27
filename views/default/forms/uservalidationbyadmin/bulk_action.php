@@ -10,8 +10,8 @@ elgg_load_js('elgg.uservalidationbyadmin');
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 
-$db = new EvanDatabase();
-$users = $db->getUsers()->where('validated', false);
+global $EVAN;
+$users = $EVAN->get('Evan\Storage\Db')->getUsers()->where('validated', false);
 
 $count = $users->getCount();
 if (!$count) {
